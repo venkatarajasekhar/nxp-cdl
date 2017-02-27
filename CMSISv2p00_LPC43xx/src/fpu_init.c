@@ -56,13 +56,18 @@ void fpuInit(void)
     Mvfr1 = *regMvfr1;
 
     vfpPresent = ((SCB_MVFR0_RESET == Mvfr0) && (SCB_MVFR1_RESET == Mvfr1));
-    
-    if(vfpPresent)
+   if(vfpPresent)
     {
         Cpacr = *regCpacr;
         Cpacr |= (0xF << 20);
         *regCpacr = Cpacr;   // enable CP10 and CP11 for full access
     }
+    else{
+      Cpacr = *regCpacr;
+      Cpacr &= ~(0xF << 20);
+      *regCpacr = Cpacr;
+      return; // disable CP10 and CP11 for full access
+    }   
 
 }
 
